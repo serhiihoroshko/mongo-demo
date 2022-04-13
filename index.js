@@ -49,7 +49,7 @@ async function createBook(){
     }
 };
 
-async function getBooks() {
+async function getBook() {
     const books = await Book
         .find({ author: 'J.R.R. Tolkien', isPublished: true, price: { $gte: 10, $lte: 20 } })
         .limit(10)
@@ -75,6 +75,6 @@ async function removeBook(id) {
 };
 
 createBook();
-getBooks();
+getBook();
 updateBook();
 removeBook();
