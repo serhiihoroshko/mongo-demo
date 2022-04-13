@@ -20,7 +20,15 @@ const bookSchema = new mongoose.Schema({
         'Deception', 'Coming of age']
      },
     author: String,
-    tags: [ String ],
+    tags: { 
+        type: Array,
+        validate: { 
+            validator: function(tagValue) {
+                return tagValue && tagValue.length > 0;
+            },
+            message: 'A book should have at least one tag.'
+         }
+     },
     date: { type: Date, default: Date.now },
     isPublished: Boolean,
     price: { 
@@ -33,12 +41,12 @@ const Book = mongoose.model('Book', bookSchema);
 
 async function createBook(){
     const book = new Book({
-        name: 'The Fellowship of the Ring',
+        name: 'Tolkien: Maker of Middle-earth',
         category: 'Peace and war',
         author: 'J.R.R. Tolkien',
         tags: ['tolkien', 'lordoftherings'],
         isPublished: true,
-        price: 33
+        price: 49
     });
     
     try {
@@ -63,7 +71,7 @@ async function updateBook(id) {
     if (!book) return;
 
     book.isPublished = true;
-    book.author = 'J.R.R. Tolkien';
+    book.price = 16;
 
     const result = await book.save();
     debug(result);
@@ -76,5 +84,5 @@ async function removeBook(id) {
 
 createBook();
 getBook();
-updateBook();
-removeBook();
+updateBook('62572d1191f392da2031974e');
+removeBook('625731cff4bbc0f724548334');
