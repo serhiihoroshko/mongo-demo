@@ -28,13 +28,19 @@ const bookSchema = new mongoose.Schema({
       'Deception',
       'Coming of age',
     ],
+    lowercase: true,
+    trim: true,
   },
   author: String,
   tags: {
     type: Array,
     validate: {
-      validator: function (tagValue) {
-        return tagValue && tagValue.length > 0;
+      isAsync: true,
+      validator: function (tagValue, callback) {
+        setTimeout(() => {
+          const result = tagValue && tagValue.length > 0;
+          callback(result);
+        }, 1000);
       },
       message: 'A book should have at least one tag.',
     },
@@ -46,6 +52,8 @@ const bookSchema = new mongoose.Schema({
     required: function () {
       return this.isPublished;
     },
+    get: (getValue) => Math.round(getValue),
+    set: (setValue) => Math.round(setValue),
   },
 });
 
@@ -65,7 +73,7 @@ async function createBook() {
     const result = await book.save();
     debug(result);
   } catch (error) {
-    debug(error.message);
+    for (field in error.errors) debug(error.errors[field].message);
   }
 }
 
