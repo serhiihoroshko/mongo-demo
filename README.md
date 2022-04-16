@@ -1,6 +1,41 @@
 - Required mongodb: `mongod` command
 - Windows, Develop: `npm run windowsDebug` command
 
+### Modelling Relationships:
+Trade off between query **performance** vs **consistency**
+1. Using References (Normalization) -> **CONSISTENCY**
+```
+let author = {
+    name: 'Travis Scott'
+}
+
+let book = {
+    author: 'id'
+}
+```
+2. Using Embedded Documents (Denormalization) -> **PERFORMANCE**
+```
+let book = {
+    author: {
+        name: 'Travis Scott'
+    }
+}
+```
+3. Hybrid approach mongodb (best for small shops)
+```
+let author = {
+    name: 'Travis Scott'
+    ... // and other prorerties
+}
+
+let book = {
+    author: {
+        id: 'referral',
+        name: 'Travis Scott'
+    }
+}
+```
+
 ### Comparison Query Operators:
 - eq (equal),
 - ne (not equal),
